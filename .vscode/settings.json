@@ -1,0 +1,13 @@
+{
+    "workbench.iconTheme": "vscode-vba-icons",
+    "files.associations": {
+        "*.dcm": "vba"
+    },
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#0e6901",
+        "activityBarBadge.background": "#00db12"
+    },
+    "workbench.colorTheme": "Monokai",
+    "git.ignoreMissingGitWarning": true,
+    "files.encoding": "shiftjis"
+}

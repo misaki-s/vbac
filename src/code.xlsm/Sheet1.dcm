@@ -1,0 +1,25 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Dim cnt As Long
+
+Sub Sample3(Path As String)
+    Dim buf As String, f As Object
+    buf = Dir(Path & "\*.*")
+    Do While buf <> ""
+        cnt = cnt + 1
+        Cells(cnt, 1) = buf
+        buf = Dir()
+    Loop
+    With CreateObject("Scripting.FileSystemObject")
+        For Each f In .GetFolder(Path).SubFolders
+            Call Sample3(f.Path)
+        Next f
+    End With
+End Sub
