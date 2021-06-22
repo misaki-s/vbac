@@ -17,21 +17,25 @@ End Sub
 'フォルダの再帰検索
 Sub getDirR(path As String)
     Dim buf As String, f As Object
-    buf = Dir(path & "\*.*")
-    Do While buf <> ""
-        cnt = cnt + 1
-        Cells(cnt, 1) = buf
-        buf = Dir()
-    Loop
+'    buf = Dir(path & "\*.*")
+'    Do While buf <> ""
+'        cnt = cnt + 1
+'        Cells(cnt, 1) = path & "\" & buf
+'        buf = Dir()
+'    Loop
+    cnt = cnt + 1
+    Cells(cnt, 1) = path
     With CreateObject("Scripting.FileSystemObject")
         For Each f In .GetFolder(path).SubFolders
             If .FolderExists(f.path) Then
                 Debug.Print (f.path & " isDir")
-            Else
-                Debug.Print (f.path & " isFile")
+                If FindCharCount(f.path, "\") <= max_depth Then
+                    Call getDirR(f.path)
+                End If
+'            Else
+'                Debug.Print (f.path & " isFile")
             End If
-            
-            Call getFolderR(f.path)
+
         Next f
     End With
 End Sub
@@ -48,7 +52,9 @@ Sub getFileR(path As String)
         Next f
         For Each f In .GetFolder(path).SubFolders
             If .FolderExists(f.path) Then
-                Call getFileR(f.path)
+                If FindCharCount(f.path, "\") <= max_depth Then
+                    Call getFileR(f.path)
+                End If
             End If
         Next f
     End With
@@ -101,10 +107,10 @@ Function FindCharCount(text, c)
     count = Len(text) - Len(Replace(text, c, ""))
     FindCharCount = count
 End Function
-Sub Test2()
-    cnt = FindCharCount("C:\works\vbac\.git\COMMITMESSAGE", "\")
-    MsgBox "【\】は" & cnt & "個ありまーす"
-End Sub
+'Sub Test2()
+'    cnt = FindCharCount("C:\works\vbac\.git\COMMITMESSAGE", "\")
+'    MsgBox "【\】は" & cnt & "個ありまーす"
+'End Sub
 
 
 Sub Test()
@@ -120,12 +126,12 @@ Sub Test()
     
     depth = depth
     max_depth = max_depth + depth
-Debug.Print max_depth
+    Debug.Print max_depth
 
 
     cnt = 1 'データ開始行
-'    Call getDirR("C:\works\vbac")
-    Call getFileR("C:\works\vbac")
+    Call getDirR("C:\works\vbac")
+'    Call getFileR("C:\works\vbac")
     
 
 End Sub
