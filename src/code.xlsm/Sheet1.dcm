@@ -9,17 +9,17 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Dim cnt As Long
 
-Sub Sample3(Path As String)
+Sub Sample3(path As String)
     Dim buf As String, f As Object
-    buf = Dir(Path & "\*.*")
+    buf = Dir(path & "\*.*")
     Do While buf <> ""
         cnt = cnt + 1
         Cells(cnt, 1) = buf
         buf = Dir()
     Loop
     With CreateObject("Scripting.FileSystemObject")
-        For Each f In .GetFolder(Path).SubFolders
-            Call Sample3(f.Path)
+        For Each f In .GetFolder(path).SubFolders
+            Call Sample3(f.path)
         Next f
     End With
 End Sub
