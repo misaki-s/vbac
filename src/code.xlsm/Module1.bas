@@ -13,7 +13,7 @@ Sub mCls()
 End Sub
 
 'フォルダの再帰検索
-Sub getFolderR(Path As String)
+Sub getDirR(Path As String)
     Dim buf As String, f As Object
     buf = Dir(Path & "\*.*")
     Do While buf <> ""
@@ -35,8 +35,27 @@ Sub getFolderR(Path As String)
 End Sub
 
 
+'ファイルの再帰検索
+Sub getFileR(Path As String)
+    Dim f As Object
+    With CreateObject("Scripting.FileSystemObject")
+        For Each f In .GetFolder(Path).Files
+            cnt = cnt + 1
+            Debug.Print f.Path
+            Cells(cnt, 1) = f.Path
+        Next f
+        For Each f In .GetFolder(Path).SubFolders
+            If .FolderExists(f.Path) Then
+                Call getFileR(f.Path)
+            End If
+        Next f
+    End With
+End Sub
+
+
 Sub Test()
     Call mCls
     cnt = 0
-    Call getFolderR("C:\works\vbac")
+'    Call getDirR("C:\works\vbac")
+    Call getFileR("C:\works\vbac")
 End Sub
