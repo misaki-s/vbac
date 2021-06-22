@@ -138,7 +138,17 @@ End Sub
 
 
 ' ユーザー定義関数(m_)
+
+' 探索文字、出現回数
 Function m_FindCharCount(address, c)
-    m_FindCharCount = FindCharCount(address, CStr(c))
+    m_FindCharCount = FindCharCount(address, c)
+End Function
+
+' 拡張子判定(MSOffice)
+Function m_isMsOffice(address)
+    Dim re
+    Set re = CreateObject("VBScript.RegExp")
+    re.Pattern = "\.xls$|\.xlsx$|\.xlsm$|\.ppt$|\.pptx$|\.doc$|\.docx$"
+    m_isMsOffice = re.Test(address)
 End Function
 
