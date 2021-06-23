@@ -61,45 +61,7 @@ Sub getFileR(path As String)
 End Sub
 
 
-Sub sample()
-    Dim i As Long
-    Dim strFile As String
-    Dim strPath As String
-    Dim obj As Object
-  
-    With Application.FileDialog(msoFileDialogFolderPicker)
-        .InitialFileName = "C:\"
-        .AllowMultiSelect = False
-        .Title = "フォルダの選択"
-        If .Show = False Then
-            Exit Sub
-        End If
-        strPath = .SelectedItems(1) & "\"
-    End With
-  
-    Application.EnableEvents = False '起動時のOpenイベント等を停止
-    On Error Resume Next 'GetObjectで取得できないファイルの対策
-    strFile = Dir(strPath)
-    i = 2
-    Do While strFile <> ""
-        Cells(i, 1) = strFile 'ファイル名
-        Cells(i, 2) = FileDateTime(strPath & strFile) '更新日時
-        Cells(i, 3) = FileLen(strPath & strFile) 'サイズ
-        Set obj = GetObject(strPath & strFile)
-        If Err.Number <> 0 Then
-            'Officeのドキュメントではないということ
-            Err.Clear
-        Else
-            Cells(i, 4).Value = obj.BuiltinDocumentProperties(3) 'Author
-            Cells(i, 5).Value = obj.BuiltinDocumentProperties(7) 'Last Author
-            obj.Close
-        End If
-        strFile = Dir()
-        i = i + 1
-    Loop
-    Set obj = Nothing
-    Application.EnableEvents = True
-End Sub
+
 
 
 Function FindCharCount(text, c)
@@ -130,8 +92,8 @@ Sub Test()
 
 
     cnt = 1 'データ開始行
-    Call getDirR("C:\works\vbac")
-'    Call getFileR("C:\works\vbac")
+'    Call getDirR("C:\works\vbac")
+    Call getFileR("C:\works\vbac")
     
 
 End Sub
@@ -152,3 +114,64 @@ Function m_isMsOffice(address)
     m_isMsOffice = re.Test(address)
 End Function
 
+'ドキュメント作成者取得
+Function m_isMsOfficeAuthor(address)
+'    Dim re
+'    Set re = CreateObject("VBScript.RegExp")
+'    re.Pattern = "\.xls$|\.xlsx$|\.xlsm$|\.ppt$|\.pptx$|\.doc$|\.docx$"
+'    m_isMsOffice = re.Test(address)
+    Dim obj As Object, s As String
+    s = ""
+    Set obj = GetObject(address)
+    If Err.Number <> 0 Then
+        'Officeのドキュメントではないということ
+        Err.Clear
+    Else
+        s = obj.BuiltinDocumentProperties(3)  'Author https://excel-ubara.com/excelvba4/EXCEL256.html
+        obj.Close
+    End If
+    m_isMsOfficeAuthor = s
+End Function
+
+'ファイル種別を取得
+Function m_fileType(address)
+    Dim fso As Object, fs As Object, r As String
+    r = ""
+    Dim attType As Integer
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    r = fso.GetFile(address).Type
+    m_fileType = r
+    
+'    Attribute なぜか全部テキストもzipファイルも32を返すので使えない。 https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q13146844163
+'    If attType And 0 Then
+'      r = "標準ファイル"
+'    ElseIf attType And 1 Then
+'      r = "読み取り専用ファイル"
+'    ElseIf attType And 2 Then
+'      r = "隠しファイル"
+'    ElseIf attType And 4 Then
+'      r = "システムファイル"
+'    ElseIf attType And 8 Then
+'      r = "ディスクドライブボリュームラベル"
+'    ElseIf attType And 16 Then
+'      r = "フォルダまたはディレクトリ"
+'    ElseIf attType And 32 Then
+'      r = "アーカイブファイル"
+'    ElseIf attType And 64 Then
+'      r = "リンクまたはショートカット"
+'    ElseIf attType And 128 Then
+'      r = "圧縮ファイル"
+'    End If
+'    Set fso = Nothing
+'    m_fileAttribute = r
+End Function
+
+'ファイル名を取得
+Function m_fileName(address)
+    Dim fso As Object, fs As Object, r As String
+    r = ""
+    Dim attType As Integer
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    r = fso.GetFileName(address)
+    m_fileName = r
+End Function
