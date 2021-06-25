@@ -1,7 +1,7 @@
 Attribute VB_Name = "Module1"
-Dim cnt As Long
-Dim depth As Long
-Dim max_depth As Long
+Public cnt As Long
+Public depth As Long
+Public max_depth As Long
 
 'イミディエイトウィンドウクリア
 Sub Cls()
@@ -98,8 +98,9 @@ Sub Test()
 
 End Sub
 
-
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' ユーザー定義関数(m_)
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 ' 探索文字、出現回数
 Function m_FindCharCount(address, c)

@@ -3,7 +3,6 @@ https://kanegolabo.com/vba-edit#toc6
 
 Excel2016
 
-
 VBAのエクスポート(bin -> src)
 ```
 cscript vbac.wsf decombine

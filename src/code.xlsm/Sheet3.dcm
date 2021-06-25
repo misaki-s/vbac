@@ -1,0 +1,32 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet3"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Sub main()
+    Call Cls
+    Dim ignore As Variant, startPath As String, style As String
+    ignore = Range("A1").Value
+    Columns("A").Clear
+    Range("A1").Value = ignore
+    Range("B1").Copy
+    Range("A1").PasteSpecial Paste:=xlPasteFormats
+    
+    startPath = Range("N2").Value
+    depth = FindCharCount(startPath, "\")
+    Debug.Print depth
+    max_depth = Range("N3").Value
+    
+    depth = depth
+    max_depth = max_depth + depth
+    Debug.Print max_depth
+
+
+    cnt = 1 'データ開始行
+'    Call getDirR("C:\works\vbac")
+    Call getFileR(startPath)
+End Sub
